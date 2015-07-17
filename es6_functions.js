@@ -103,9 +103,22 @@ let y = 5;
 console.log(x);
 console.log(y);
 
-//
-//Promises 2pts
-//
+
+//Promises 
+let fs = require('fs');
+var p = new Promise ((resolve, reject) => {
+	console.log('start');
+	fs.readFile('./readme.txt', (err, data) => {
+		!err ? resolve(data.toString()) : reject(err);
+	});
+});
+
+p.then((data) => {
+	console.log(`it is successfully resolved. Here's the data...`);
+	console.log(data);
+}).catch((err) =>{
+	console.log(err);
+}); 
 //For 2 points of extra credit implement an es6 generator.
 
 
