@@ -104,23 +104,6 @@ console.log(x);
 console.log(y);
 
 
-//Promises 
-let fs = require('fs');
-var p = new Promise ((resolve, reject) => {
-	console.log('start');
-	fs.readFile('./readme.txt', (err, data) => {
-		!err ? resolve(data.toString()) : reject(err);
-	});
-});
-
-p.then((data) => {
-	console.log(`it is successfully resolved. Here's the data...`);
-	console.log(data);
-}).catch((err) =>{
-	console.log(err);
-}); 
-
-
 // for.. of loop
 require("babel/polyfill");
 let testArr = ['a', 9, 'b', 'c', 11];
@@ -132,7 +115,7 @@ for (let x of testArr) {
 }
 console.log(sum);
 
-// es6 generator.
+// es6 generator, just a small function to try
 function *foo(x) {
     var y = 1 + (yield 'abc');
     return y;
@@ -145,8 +128,8 @@ console.log(func.next(4)); // will send in 4 to replace the yield expression, an
 
 ////generator function 2, two way communication
 function *test(x) {
-    var y = 2 * (yield (x + 1));
-    var z = yield (y / 3);
+    let y = 2 * (yield (x + 1));
+    let z = yield (y / 3);
     return (x + y + z);
 }
 
@@ -158,4 +141,59 @@ console.log( it.next(0) );   // { value:19, done:true } x = 5, y = 14, z = 0s
 console.log( it.next() )    // nothing to return
 
 
+/// another generator
+function *test2(x) {
+  let y = x + 1;
+	yield y;
+	let z = y * 3;
+	yield z;
+	return y;
+}
 
+var it = test2( 5 );
+console.log( it.next() );    // { value:6 (value of y), done:false }
+console.log( it.next() );   // { value:18 (value of z), done:false } 
+console.log( it.next() );   // { value:6 (value of y), done:true } 
+
+
+
+/// Here is a generator for the pascal triangle
+function* pascal(){
+  let curr = [1, 1];
+  var next;
+  while (true){  
+		next = []
+    for(var i = 0; i < curr.length -1; i++) {
+				next.push(curr[i] + curr[i+1]);
+			}
+		next.push(1);
+		next.unshift(1);
+		curr = next;
+    let result = yield curr;
+  }
+}
+var row = pascal();
+console.log(row.next().value);     	// row 3
+console.log(row.next().value); 			// row 4
+console.log(row.next().value); 			// row 5
+console.log(row.next().value); 			// row 6
+console.log(row.next().value); 			// row 7
+console.log(row.next().value); 			// row 8
+
+
+
+//Promises 
+let fs = require('fs');
+var p = new Promise ((resolve, reject) => {
+	console.log('start promise...');
+	fs.readFile('./readme.txt', (err, data) => {
+		!err ? resolve(data.toString()) : reject(err);
+	});
+});
+
+p.then((data) => {
+	console.log(`it is successfully resolved. Here's the data...`);
+	console.log(data);
+}).catch((err) =>{
+	console.log(err);
+}); 
