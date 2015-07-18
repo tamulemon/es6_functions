@@ -119,7 +119,40 @@ p.then((data) => {
 }).catch((err) =>{
 	console.log(err);
 }); 
-//For 2 points of extra credit implement an es6 generator.
+
+
+// for.. of loop
+require("babel/polyfill");
+let testArr = ['a', 9, 'b', 'c', 11];
+var sum = 0;
+for (let x of testArr) {
+	if(!isNaN(x)) {
+			sum += x;
+		}
+}
+console.log(sum);
+
+// es6 generator.
+function *foo(x) {
+    var y = 1 + (yield 'abc');
+    return y;
+}
+
+let func = foo();
+console.log(func.next()); // will log out the data that is sent out by 'yield' { value: 'abc', done: false }
+console.log(func.next(4)); // will send in 4 to replace the yield expression, and y is calculated. and because y is returned so done is true{ value: 'abc', done: false }
 
 
 
+function *test(x) {
+    var y = 2 * (yield (x + 1));
+    var z = yield (y / 3);
+    return (x + y + z);
+}
+
+var it = test( 5 );
+// note: not sending anything into `next()` here
+console.log( it.next() );       // { value:6, done:false }
+console.log( it.next(7) );   // { value:7*2/3 = 4.67, done:false } 7 will be replacing the first yield
+console.log( it.next(0) );   // { value:19, done:true } x = 5, y = 14, z = 0s
+console.log( it.next() )    // nothing to return
